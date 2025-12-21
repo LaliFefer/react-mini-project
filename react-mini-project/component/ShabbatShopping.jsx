@@ -13,45 +13,58 @@ export default function ShabbatShopping() { // הגדרת הקומפוננטה �
 	// load on mount
 	useEffect(() => { // ריצה פעם אחת בעת טעינת הקומפוננטה
 		console.log('ShabbatShopping mounted'); // <-- בדיקת טעינה
-		try {
-			setItems(getItems()); // קורא לפריטים מתוך מודול הנתונים ומעדכן סטייט
-		} catch (err) {
-			console.error('Failed to load items:', err);
-			setItems([]); // הגנה נוספת
-		}
+		let mounted = true;
+		(async () => {
+			try {
+				const list = await getItems(); // עכשיו getItems() מחזיר Promise
+				if (mounted) setItems(list);
+			} catch (err) {
+				console.error('Failed to load items:', err);
+				if (mounted) setItems([]);
+			}
+		})();
+		return () => { mounted = false; };
 	}, []); // מערך תלות ריק => פועל פעם אחת
 
-	const refresh = () => setItems(getItems()); // פונקציה קצרה לרענון הפריטים
+	const refresh = async () => { // רענון אסינכרוני
+		try {
+			const list = await getItems();
+			setItems(list);
+		} catch (err) {
+			console.error('refresh failed:', err);
+			setItems([]);
+		}
+	};
 
 	// add
-	function handleAdd(e) { // מטפל בשליחת הטופס להוספה
-		e.preventDefault(); // מונע רענון דף
-		if (!form.name.trim()) return; // לא מוסיף אם השדה שם ריק
+	async function handleAdd(e) { // מטפל בשליחת הטופס להוספה
+		e.preventDefault();
+		if (!form.name.trim()) return;
 		try {
-			addItem(form); // קורא לפונקציית הוספה
-			setForm({ name: '', quantity: '', note: '' }); // מאפס את הטופס
-			refresh(); // מרענן את הרשימה
+			await addItem(form); // כעת מחכים ל־Promise
+			setForm({ name: '', quantity: '', note: '' });
+			await refresh();
 		} catch (err) {
-			console.error(err); // מטפל בשגיאות
+			console.error(err);
 		}
 	}
 
 	// start editing
-	function startEdit(item) { // מתחיל מצב עריכה עבור פריט
-		setEditingId(item.id); // שומר את ה־id שנערך
-		setEditForm({ name: item.name, quantity: item.quantity, note: item.note, checked: item.checked }); // ממלא את הטופס בערכי הפריט
+	 function startEdit(item) { // מתחיל מצב עריכה עבור פריט
+		 setEditingId(item.id); // שומר את ה־id שנערך
+		 setEditForm({ name: item.name, quantity: item.quantity, note: item.note, checked: item.checked }); // ממלא את הטופס בערכי הפריט
 	}
 
 	// save edit
-	function saveEdit(id) { // שומר שינויים לפריט
-		if (!editForm.name || !editForm.name.trim()) return; // בודק שם תקין
+	async function saveEdit(id) { // שומר שינויים לפריט
+		if (!editForm.name || !editForm.name.trim()) return;
 		try {
-			updateItem(id, editForm); // קורא לפונקציית עדכון
-			setEditingId(null); // סוגר מצב עריכה
-			setEditForm({}); // מאפס את טופס העריכה
-			refresh(); // מרענן את הרשימה
+			await updateItem(id, editForm);
+			setEditingId(null);
+			setEditForm({});
+			await refresh();
 		} catch (err) {
-			console.error(err); // מדפיס שגיאות
+			console.error(err);
 		}
 	}
 
@@ -60,27 +73,34 @@ export default function ShabbatShopping() { // הגדרת הקומפוננטה �
 		setEditForm({}); // מאפס טופס
 	}
 
-	// toggle checked
-	function toggleChecked(item) { // מעביר מצב סימון/לא סימון
-		updateItem(item.id, { checked: !item.checked }); // עדכון הפריט עם הערך הנגדי
-		refresh(); // מרענן תצוגה
-	}
-
-	// remove
-	function handleRemove(id) { // מטפל במחיקה של פריט
-		if (!window.confirm('למחוק את הפריט?')) return; // שואל אישור מהמשתמש
+	async function toggleChecked(item) { // מעביר מצב סימון/לא סימון
 		try {
-			removeItem(id); // קורא לפונקציית מחיקה
-			refresh(); // מרענן רשימה
+			await updateItem(item.id, { checked: !item.checked });
+			await refresh();
 		} catch (err) {
-			console.error(err); // מטפל בשגיאות
+			console.error(err);
 		}
 	}
 
-	function handleClearAll() { // מנקה את כל הפריטים
-		if (!window.confirm('למחוק את כל הפריטים?')) return; // אישור מהמשתמש
-		clearItems(); // קורא לניקיון
-		refresh(); // מרענן
+	// remove
+	async function handleRemove(id) { // מטפל במחיקה של פריט
+		if (!window.confirm('למחוק את הפריט?')) return;
+		try {
+			await removeItem(id);
+			await refresh();
+		} catch (err) {
+			console.error(err);
+		}
+	}
+
+	async function handleClearAll() { // מנקה את כל הפריטים
+		if (!window.confirm('למחוק את כל הפריטים?')) return;
+		try {
+			await clearItems();
+			await refresh();
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	return (
