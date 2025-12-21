@@ -9,38 +9,29 @@ const itemForShabbat = [
 
 let items = itemForShabbat.slice(); // עותק של המערך לשימוש דינמי (שינוי ב-items לא ישנה את המקור)
 
-function generateId() { // פונקציה ליצירת מזהה ייחודי
-	return Date.now().toString(36) + Math.random().toString(36).slice(2, 9); // שילוב תזמון + רנדום בסיס 36
-}
-
 // Public API (פונקציות שנחשפות לשימוש חיצוני)
 function getItems() { // מחזיר העתק של המערך הנוכחי כדי למנוע שינוי ישיר
 	return items.slice(); // שיכפול המערך
 }
 
-/**
- * addItem({ name, quantity, note, checked })
- */
 function addItem(item) { // מוסיף פריט חדש
-	if (!item || !item.name) throw new Error('Item must have a name'); // בדיקה שהפריט קיים ויש לו שם
+	if (!item || !item.name) throw new Error('Item must have a name');
 	const newItem = {
-		id: generateId(), 
+		id: Math.max(...items.map(i => Number(i.id))) + 1,
 		name: item.name, 
 		quantity: item.quantity || '', 
 		note: item.note || '',
-		checked: !!item.checked, 
+		checked: item.checked, 
 	};
 	items.push(newItem); 
 	return newItem; // החזרת הפריט שנוסף
 }
-/**
- * updateItem(id, { name?, quantity?, note?, checked? })
- */
+
 function updateItem(id, updates) { // מעדכן פריט לפי id
-	const idx = items.findIndex(i => i.id === id); // מחפש אינדקס לפי id
-	if (idx === -1) throw new Error('Item not found'); // שגיאה אם לא נמצא
-	items[idx] = { ...items[idx], ...updates }; // מיזוג העדכונים עם הפריט הקיים
-	return items[idx]; // החזרת הפריט המעודכן
+	const index = items.findIndex(i => i.id === id);
+	if (index === -1) throw new Error('Item not found'); 
+	items[index] = { ...items[index], ...updates }; // מיזוג העדכונים עם הפריט הקיים
+	return items[index]; // החזרת הפריט המעודכן
 }
 
 function removeItem(id) { // מסיר פריט לפי id
