@@ -23,3 +23,80 @@
 .read-the-docs {
   color: #888;
 }
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0.5rem 1rem;
+  border-bottom:1px solid #eee;
+}
+.header .logo{font-weight:700}
+.header nav button{margin-left:0.5rem}
+
+.container{padding:1rem}
+.home-form{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;max-width:720px;margin:0 auto}
+.home-form label{display:flex;flex-direction:column;text-align:right}
+.form-actions{grid-column:1/-1;display:flex;gap:0.5rem;justify-content:flex-start}
+.status-grid{display:flex;gap:1rem;margin-top:1rem}
+.status-card{border:1px solid #ddd;padding:0.5rem;border-radius:6px;flex:1}
+.countdown{margin-top:1rem;font-weight:600}
+
+/* Global typography and spacing overrides to match Bootstrap look */
+:root{
+  --bs-body-font-family: 'Assistant', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+body{font-family: 'Assistant', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:#fbfbfc}
+.app-root{min-height:100vh}
+.container{max-width:1100px}
+
+/* Visual polish for a clean, modern look */
+body{background: linear-gradient(180deg,#fbfcfe 0%, #f7f9fc 100%); color:#1f2937}
+.navbar{background:transparent}
+.navbar-brand{color:#0d6efd}
+.navbar .nav-link{color:#374151}
+.navbar .nav-link.active, .navbar .nav-link:hover{color:#0d6efd}
+
+.card{border:0;border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,0.08)}
+.card .card-title{color:#111827}
+
+.btn-primary{background:linear-gradient(90deg,#2563eb,#4f46e5);border:0}
+.btn-primary:focus{box-shadow:0 0 0 0.25rem rgba(59,130,246,0.15)}
+
+.form-control, .form-select{border-radius:8px}
+
+.display-6{font-weight:600}
+
+.bg-light{background:#ffffff !important}
+
+/* make small screens look tight */
+@media (max-width:576px){
+  .container{padding-left:1rem;padding-right:1rem}
+  .navbar .nav-link{padding:0.4rem 0.6rem}
+}
+
+/* Hero styles */
+.hero{background:linear-gradient(180deg, rgba(59,130,246,0.06), rgba(79,70,229,0.03)); border:1px solid rgba(15,23,42,0.03)}
+.hero h1{color:#0f172a}
+
+/* Tighter spacing for status cards */
+.card .display-6{font-size:1.25rem}
+
+/* ensure RTL spacing looks correct */
+body[dir="rtl"] .navbar .navbar-brand{margin-left:0}
+
+/* Micro-interactions */
+.status-card-hover{transition:transform .18s ease, box-shadow .18s ease}
+.status-card-hover:hover{transform:translateY(-6px) scale(1.02); box-shadow:0 12px 30px rgba(16,24,40,0.12)}
+.status-card-hover:active{transform:translateY(-2px) scale(0.995)}
+
+/* colored borders for variants */
+.border-success{box-shadow:0 0 0 4px rgba(16,185,129,0.06)}
+.border-warning{box-shadow:0 0 0 4px rgba(245,158,11,0.06)}
+
+.bi{vertical-align:-0.125em}
+
+
+
+
+
