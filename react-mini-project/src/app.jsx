@@ -1,38 +1,43 @@
-import { h } from 'preact'
 import { useState } from 'preact/hooks'
+import preactLogo from './assets/preact.svg'
+import viteLogo from '/vite.svg'
 import './app.css'
-import { ShabbatProvider } from './context/ShabbatContext'
-import Header from './components/Header'
-import Home from './pages/Home'
-
-// הערות :
-// קובץ זה מהווה את ה"מסגרת" (layout) של האפליקציה.
-// 1. `ShabbatProvider` עוטף את כל האפליקציה ומספק הקשר גלובלי (Context)
-//    שבו מאוחסנות הגדרות השבת ופונקציות אסינכרוניות לדוגמה.
-// 2. הוספתי `Header` כקומפוננטה נפרדת שמציגה לוגו ותפריט ניווט.
-// 3. במקום להשתמש ב-router חיצוני, משתמשים כאן ב-routing פשוט מבוסס state
-//    (החלפה של `route` תציג עמוד מתאים). זה מספיק לפרויקט לימודי ופשוט.
-// 4. מטרת `App` — להחזיק את הפריסה הכללית בלבד (logo, nav, container),
-//    ולא לכלול לוגיקה גדולה או טפסים — אלה עוברים לעמודים נפרדים.
-
-function Placeholder({ title }) {
-  return <section><h2>{title}</h2><p>עמוד דמה — עוד יש לממש.</p></section>
-}
 
 export function App() {
-  const [route, setRoute] = useState('home')
+  const [count, setCount] = useState(0)
 
   return (
-    <ShabbatProvider>
-      <div class="app-root">
-        <Header onNavigate={setRoute} />
-        <main class="container">
-          {route === 'home' && <Home />}
-          {route === 'shopping' && <Placeholder title="קניות" />}
-          {route === 'tasks' && <Placeholder title="משימות" />}
-          {route === 'cooking' && <Placeholder title="בישולים" />}
-        </main>
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} class="logo" alt="Vite logo" />
+        </a>
+        <a href="https://preactjs.com" target="_blank">
+          <img src={preactLogo} class="logo preact" alt="Preact logo" />
+        </a>
       </div>
-    </ShabbatProvider>
+      <h1>Vite + Preact</h1>
+      <div class="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/app.jsx</code> and save to test HMR
+        </p>
+      </div>
+      <p>
+        Check out{' '}
+        <a
+          href="https://preactjs.com/guide/v10/getting-started#create-a-vite-powered-preact-app"
+          target="_blank"
+        >
+          create-preact
+        </a>
+        , the official Preact + Vite starter
+      </p>
+      <p class="read-the-docs">
+        Click on the Vite and Preact logos to learn more
+      </p>
+    </>
   )
 }
