@@ -1,4 +1,6 @@
-
+import preactLogo from './assets/preact.svg'
+import viteLogo from '/vite.svg'
+import ShabbatShopping from './component/ShabbatShopping';
 import './app.css'
 import { h } from 'preact'
 import { useState } from 'preact/hooks'
@@ -8,8 +10,12 @@ import AppTasks from './AppTasks.jsx'
 export function App() {
   const [route, setRoute] = useState('home')
 
-  return (
-    <div>
+
+return (
+  <div>
+    <ShabbatShopping />
+  </div>
+   <div>
       <header style={{ padding: '8px', borderBottom: '1px solid #ddd', display: 'flex', gap: '8px' }}>
         <button onClick={() => setRoute('home')}>Home</button>
         <button onClick={() => setRoute('tasks')}>Tasks</button>
@@ -20,6 +26,7 @@ export function App() {
         {route === 'tasks' && <AppTasks />}
       </main>
     </div>
-  )
-}
+);
+
+
 
