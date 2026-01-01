@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'preact/hooks';
 import { fetchDefaultSettings } from '../data/Home';
+import AppTasks from '../AppTasks.jsx'
 
 function Home() {
   const [shabbatTime, setShabbatTime] = useState("");
   const [location, setLocation] = useState("");
   const [numberOfMeals, setNumberOfMeals] = useState(3);
   const [meals, setMeals] = useState(false);
+  const [showTasks, setShowTasks] = useState(false);
   useEffect(() => {
     fetchDefaultSettings().then((data) => {
       setShabbatTime(data.shabbatTime);
@@ -55,7 +57,12 @@ function Home() {
         checked={meals}
         onChange={(e) => setMeals(e.target.checked)}
       />
-      <button onClick={handleReset}>איפוס הגדרות</button>
+      <div style={{ marginTop: '12px' }}>
+        <button onClick={handleReset}>איפוס הגדרות</button>
+        <button onClick={() => setShowTasks(s => !s)} style={{ marginLeft: '8px' }}>{showTasks ? 'הסתר משימות' : 'הצג משימות'}</button>
+      </div>
+
+      {showTasks && <AppTasks />}
     </div>
   );
 }
