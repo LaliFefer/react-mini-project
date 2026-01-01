@@ -41,9 +41,5 @@ export async function removeItem(id) { // מסיר פריט לפי id
 	return true; // החזרה שמחיקה הצליחה
 }
 
-export async function clearItems() { // מנקה את כל הפריטים
-	items = []; // אפס את המערך
-	return []; // מחזיר מערך ריק
-}
 
-export default { getItems, addItem, updateItem, removeItem, clearItems }; // ייצוא ברירת מחדל כאובייקט
+export default { getItems, addItem, updateItem, removeItem}; // ייצוא ברירת מחדל כאובייקט

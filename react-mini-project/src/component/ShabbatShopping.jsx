@@ -1,7 +1,6 @@
 // קומפוננטת Preact: ShabbatShopping.jsx
 import { useEffect, useState } from 'preact/hooks'; // ייבוא הוקים מ־Preact (אין ספריית react בתלויות)
-import { Component } from 'preact'; // <-- נוסף כדי לממש ErrorBoundary
-import { getItems, addItem, updateItem, removeItem, clearItems } from '../data/ShabbatShopping'; // פונקציות נתונים
+import { getItems, addItem, updateItem, removeItem } from '../data/ShabbatShopping'; // פונקציות נתונים
 
 export default function ShabbatShopping() { // הגדרת הקומפוננטה הראשית
 	// state
@@ -9,6 +8,7 @@ export default function ShabbatShopping() { // הגדרת הקומפוננטה �
 	const [form, setForm] = useState({ name: '', quantity: '', note: '' }); // מצב לטופס הוספה
 	const [editingId, setEditingId] = useState(null); // מזהה של פריט בעדכון
 	const [editForm, setEditForm] = useState({}); // מצב לטופס עריכה
+	const [showActions, setShowActions] = useState(false); // האם להראות כפתורי עריכה/מחיקה לכל פריט (ברירת מחדל: false => רק תצוגת תיבות סימון)
 
 	// load on mount
 	useEffect(() => { // ריצה פעם אחת בעת טעינת הקומפוננטה
@@ -93,15 +93,6 @@ export default function ShabbatShopping() { // הגדרת הקומפוננטה �
 		}
 	}
 
-	async function handleClearAll() { // מנקה את כל הפריטים
-		if (!window.confirm('למחוק את כל הפריטים?')) return;
-		try {
-			await clearItems();
-			await refresh();
-		} catch (err) {
-			console.error(err);
-		}
-	}
 
 	return (
 		// JSX: תצוגת הקומפוננטה
@@ -137,55 +128,60 @@ export default function ShabbatShopping() { // הגדרת הקומפוננטה �
 					<button type="submit">הוסף</button>
 				</form>
 
-				{/* תצוגת הרשימה או הודעת ריק */}
-				{items.length === 0 ? (
-					<p>הרשימה ריקה.</p>
-				) : (
-					<ul style={{ listStyle: 'none', padding: 0 }}>
-						{items.map((it) => (
-							<li key={it.id} style={{ display: 'flex', gap: 8, alignItems: 'center', padding: 8, borderBottom: '1px solid #eee' }}>
-								{/* תיבת סימון */}
-								{/* מתקנים: כעת נכונה הצגת הסימון (true => מסומן) */}
-								<input type="checkbox" checked={!!it.checked} onChange={() => toggleChecked(it)} />
-								{editingId === it.id ? (
-									// מצב טקסטים לעריכה
+{/* כפתור עליון שמחליף בין תצוגת "רק סימון" לבין תצוגת "פעולות נוספות" */}
+			<div style={{ marginBottom: 12 }}>
+				{/* לחיצה על הכפתור תשנה את מצב התצוגה */}
+				<button onClick={() => setShowActions(s => !s)}>{showActions ? 'הסתר פעולות נוספות' : 'הצג פעולות נוספות'}</button>
+			</div>
+
+			{/* תצוגת הרשימה או הודעת ריק */}
+			{items.length === 0 ? (
+				<p>הרשימה ריקה.</p>
+			) : (
+				<ul style={{ listStyle: 'none', padding: 0 }}>
+					{items.map((it) => (
+						<li key={it.id} style={{ display: 'flex', gap: 8, alignItems: 'center', padding: 8, borderBottom: '1px solid #eee' }}>
+							{/* תיבת סימון שמסמנת אם הפריט בוצע */}
+							<input type="checkbox" checked={!!it.checked} onChange={() => toggleChecked(it)} />
+
+							{/* אם showActions=false - מציגים תצוגה קומפקטית בלבד */}
+							{!showActions ? (
+								/* קומפקט: שם, כמות והערה, אין כפתורי עריכה/מחיקה */
+								<div style={{ flex: 1 }}>
+									{/* שם הפריט - אם מסומן מוצג קו חוצה */}
+									<strong style={{ textDecoration: it.checked ? 'line-through' : 'none' }}>{it.name}</strong>
+									{/* שורה פחות בולטת לכמות/הערה */}
+									<div style={{ fontSize: 12, color: '#555' }}>{it.quantity ?? ''} {it.note ? `• ${it.note}` : ''}</div>
+								</div>
+							) : (
+								/* אם showActions=true - מציגים גם כפתורי עריכה ומחיקה */
+								editingId === it.id ? (
+									/* מצב עריכה: שדות לשינוי ושמירה/ביטול */
 									<>
-										<input
-											value={editForm.name ?? ''} // שם לעריכה (הגנה מפני undefined)
-											onChange={(e) => setEditForm({ ...editForm, name: e.currentTarget.value })}
-											style={{ flex: 2 }}
-										/>
-										<input
-											value={editForm.quantity ?? ''} // כמות לעריכה (הגנה)
-											onChange={(e) => setEditForm({ ...editForm, quantity: e.currentTarget.value })}
-											style={{ flex: 1 }}
-										/>
-										<input
-											value={editForm.note ?? ''} // הערה לעריכה (הגנה)
-											onChange={(e) => setEditForm({ ...editForm, note: e.currentTarget.value })}
-											style={{ flex: 1 }}
-										/>
+										<input value={editForm.name ?? ''} onChange={(e) => setEditForm({ ...editForm, name: e.currentTarget.value })} style={{ flex: 2 }} />
+										<input value={editForm.quantity ?? ''} onChange={(e) => setEditForm({ ...editForm, quantity: e.currentTarget.value })} style={{ flex: 1 }} />
+										<input value={editForm.note ?? ''} onChange={(e) => setEditForm({ ...editForm, note: e.currentTarget.value })} style={{ flex: 1 }} />
 										<button onClick={() => saveEdit(it.id)}>שמור</button>
 										<button onClick={cancelEdit}>בטל</button>
 									</>
 								) : (
-									// מצב תצוגה רגיל
+									/* תצוגת פריט עם כפתורי עריכה ומחיקה */
 									<>
 										<div style={{ flex: 1 }}>
-											<strong style={{ textDecoration: it.checked ? 'line-through' : 'none' }}>{it.name}</strong> {/* שם עם קו חוצה אם מסומן */}
-											<div style={{ fontSize: 12, color: '#555' }}>{it.quantity ?? ''} {it.note ? `• ${it.note}` : ''}</div> {/* כמות והערה אם קיימת */}
+											<strong style={{ textDecoration: it.checked ? 'line-through' : 'none' }}>{it.name}</strong>
+											<div style={{ fontSize: 12, color: '#555' }}>{it.quantity ?? ''} {it.note ? `• ${it.note}` : ''}</div>
 										</div>
 										<button onClick={() => startEdit(it)}>ערוך</button>
 										<button onClick={() => handleRemove(it.id)}>מחק</button>
 									</>
+								)
 								)}
 							</li>
 						))}
 					</ul>
 				)}
 
-				{/* כפתור לניקוי כל הפריטים */}
-				<button onClick={handleClearAll} style={{ marginTop: 12 }}>נקה הכל</button>
+
 			</div>
 	);
 
