@@ -1,3 +1,8 @@
+import './app.css'
+import Home from '../component/Home.jsx'
+
+export function App() {
+  return <Home />
 import { useState } from 'preact/hooks' // שונתה/נוספה: מביא useState לנהל מצב ברכיב
 import preactLogo from './assets/preact.svg' // ...existing code...
 import viteLogo from '/vite.svg' // ...existing code...
@@ -48,5 +53,6 @@ export function App() { // שורש הרכיב נשאר אך תוכן שונה
       )}
     </>
   )
-}
+
+}}
 
