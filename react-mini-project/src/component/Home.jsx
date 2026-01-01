@@ -2,7 +2,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { fetchDefaultSettings } from '../data/Home';
 import AppTasks from '../AppTasks.jsx'
 
-function Home() {
+function Home({ setRoute }) {
   const [shabbatTime, setShabbatTime] = useState("");
   const [location, setLocation] = useState("");
   const [numberOfMeals, setNumberOfMeals] = useState(3);
@@ -60,6 +60,7 @@ function Home() {
       <div style={{ marginTop: '12px' }}>
         <button onClick={handleReset}>איפוס הגדרות</button>
         <button onClick={() => setShowTasks(s => !s)} style={{ marginLeft: '8px' }}>{showTasks ? 'הסתר משימות' : 'הצג משימות'}</button>
+        <button onClick={() => setRoute('shopping')} style={{ marginLeft: '8px' }}>לרשימת קניות</button>
       </div>
 
       {showTasks && <AppTasks />}

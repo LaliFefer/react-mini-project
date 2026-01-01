@@ -7,26 +7,23 @@ import { useState } from 'preact/hooks'
 import Home from './component/Home.jsx'
 import AppTasks from './AppTasks.jsx'
 
+
 export function App() {
   const [route, setRoute] = useState('home')
 
-
 return (
   <div>
-    <ShabbatShopping />
-  </div>
-   <div>
       <header style={{ padding: '8px', borderBottom: '1px solid #ddd', display: 'flex', gap: '8px' }}>
         <button onClick={() => setRoute('home')}>Home</button>
         <button onClick={() => setRoute('tasks')}>Tasks</button>
       </header>
 
       <main style={{ padding: '12px' }}>
-        {route === 'home' && <Home />}
+        {route === 'home' && <Home setRoute={setRoute} />}
         {route === 'tasks' && <AppTasks />}
+        {route === 'shopping' && <ShabbatShopping />}
+
       </main>
     </div>
 );
-
-
-
+}
