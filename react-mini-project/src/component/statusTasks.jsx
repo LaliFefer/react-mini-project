@@ -33,7 +33,7 @@ export function ShowItemsTasksList({ tasks, onDelete, onUpdate, onAdd, onBack })
 
   return (
     <div>
-      <h2>Tasks Details Page</h2> {/* שורה שונתה/נוספה: כותרת דף הפרטים */}
+ <h2>Tasks Details Page</h2> {/* שורה שונתה/נוספה: כותרת דף הפרטים */}
       <button onClick={onBack}>Back to list</button> {/* הוספת כפתור חזרה שמפעיל handler מה-App */}
       <button onClick={startAdd} style={{ marginLeft: '8px' }}>Add New Task</button> {/* כפתור הוספה שמופיע פעם אחת בדף */}
 
