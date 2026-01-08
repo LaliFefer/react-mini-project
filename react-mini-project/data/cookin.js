@@ -1,47 +1,62 @@
 const basicCookin = [
-    {
+    
+]
+
+const CookingForEveryMeal = [{
         id: 1,
         name: "halot",
         PreparationTime: "80 minutes",
-        Comment: "",
-        Prepared: false
-    }
-]
+        Comment: "basic",
+        Prepared: false,
 
-const CookingForEveryMeal = [
-    {
-        id: 1,
-        name: "soup",
-        PreparationTime: "10 minutes",
-        Comment: "for winter shabbat",
-        Prepared: false
     },
     {
         id: 2,
-        name: "chicken",
-        PreparationTime: "45 minutes",
-        Comment: "with spices",
+        name: "soup",
+        PreparationTime: "10 minutes",
+        Comment: "first meal",
         Prepared: false
     },
     {
         id: 3,
-        name: "fish",
-        PreparationTime: "20 minutes",
-        Comment: "grilled",
+        name: "chicken",
+        PreparationTime: "45 minutes",
+        Comment: "first meal",
         Prepared: false
     },
     {
         id: 4,
-        name: "Cholent",
-        PreparationTime: "60 hours",
-        Comment: "",
+        name: "fish",
+        PreparationTime: "20 minutes",
+        Comment: "first meal",
         Prepared: false
     },
     {
         id: 5,
+        name: "Cholent",
+        PreparationTime: "60 hours",
+        Comment: "second meal",
+        Prepared: false
+    },
+    {
+        id: 6,
         name: "liver",
         PreparationTime: "15 minutes",
-        Comment: "",
+        Comment: "second meal",
+        Prepared: false
+    },
+    {
+     id: 7,
+        name: "rice",
+        PreparationTime: "15 minutes",
+        Comment: "first meal",
+        Prepared: false
+    },
+    {
+    id: 8,
+        name: "pie",
+        PreparationTime: "15 minutes",
+        Comment: "third meal",
         Prepared: false
     }
 ]
@@ -69,8 +84,17 @@ export function deleteCookingItem(id) {// מחיקת פריט על פי מזהה
     const deletedItem = CookingForEveryMeal.splice(index, 1);
     return deletedItem[0];
 }
-export function clearAllCookingItems() {// קבלת כל הפריטים
+export function clearAllCookingItems() {// ניקוי כל הפריטים
     CookingForEveryMeal.length = 0;
     return [];
 }
+export function forFirstMeal() {// סינון פריטים לסעודה ראשונה
+    return CookingForEveryMeal.filter(item => item.Comment === "first meal"||item.Comment === "basic");
+}
+    export function forSecondMeal() {// סינון פריטים לסעודה שנייה
+    return CookingForEveryMeal.filter(item => item.Comment === "second meal"||item.Comment === "basic");
+} 
+  export function forThirdMeal() {// סינון פריטים לסעודה שלישית
+    return CookingForEveryMeal.filter(item => item.Comment === "third meal"||item.Comment === "basic");
+}   
 module.exports = { basicCookin, CookingForEveryMeal, addNewCookingItem, updateCookingItem, deleteCookingItem, clearAllCookingItems };// ייצוא הפונקציות והמערכים
