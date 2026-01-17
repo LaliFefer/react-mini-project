@@ -1,14 +1,19 @@
 // קומפוננטת Preact: ShabbatShopping.jsx
-import { useEffect, useState } from 'preact/hooks'; // ייבוא הוקים מ־Preact (אין ספריית react בתלויות)
-import { getItems, addItem, updateItem, removeItem } from '../data/ShabbatShopping'; // פונקציות נתונים
+import { useEffect, useState } from 'preact/hooks'; 
+import { getItems, addItem, updateItem, removeItem } from '../data/ShabbatShopping';
 
-export default function ShabbatShopping() { // הגדרת הקומפוננטה הראשית
-	// state
+export default function ShabbatShopping({ filterKind = null }) { // הגדרת הקומפוננטה הראשית עם prop לסינון
+	
 	const [items, setItems] = useState([]); // משתנה מצב למערך הפריטים
-	const [form, setForm] = useState({ name: '', quantity: '', note: '' }); // מצב לטופס הוספה
+	const [form, setForm] = useState({ name: '', quantity: '', note: '', kind: ['בשבת בבית'] }); // מצב לטופס הוספה עם kind ברירת מחדל
 	const [editingId, setEditingId] = useState(null); // מזהה של פריט בעדכון
 	const [editForm, setEditForm] = useState({}); // מצב לטופס עריכה
 	const [showActions, setShowActions] = useState(false); // האם להראות כפתורי עריכה/מחיקה לכל פריט (ברירת מחדל: false => רק תצוגת תיבות סימון)
+
+	// סינון פריטים לפי filterKind
+	const filteredItems = filterKind
+		? items.filter(it => it.kind && it.kind.includes(filterKind))
+		: items;
 
 	// load on mount
 	useEffect(() => { // ריצה פעם אחת בעת טעינת הקומפוננטה
@@ -17,6 +22,7 @@ export default function ShabbatShopping() { // הגדרת הקומפוננטה �
 		(async () => {
 			try {
 				const list = await getItems(); // עכשיו getItems() מחזיר Promise
+		
 				if (mounted) setItems(list);
 			} catch (err) {
 				console.error('Failed to load items:', err);
@@ -47,7 +53,7 @@ export default function ShabbatShopping() { // הגדרת הקומפוננטה �
 		} catch (err) {
 			console.error(err);
 		}
-	}
+}	
 
 	// start editing
 	 function startEdit(item) { // מתחיל מצב עריכה עבור פריט
@@ -135,11 +141,11 @@ export default function ShabbatShopping() { // הגדרת הקומפוננטה �
 			</div>
 
 			{/* תצוגת הרשימה או הודעת ריק */}
-			{items.length === 0 ? (
+			{filteredItems.length === 0 ? (
 				<p>הרשימה ריקה.</p>
 			) : (
 				<ul style={{ listStyle: 'none', padding: 0 }}>
-					{items.map((it) => (
+					{filteredItems.map((it) => (
 						<li key={it.id} style={{ display: 'flex', gap: 8, alignItems: 'center', padding: 8, borderBottom: '1px solid #eee' }}>
 							{/* תיבת סימון שמסמנת אם הפריט בוצע */}
 							<input type="checkbox" checked={!!it.checked} onChange={() => toggleChecked(it)} />
@@ -165,8 +171,8 @@ export default function ShabbatShopping() { // הגדרת הקומפוננטה �
 										<button onClick={cancelEdit}>בטל</button>
 									</>
 								) : (
-									/* תצוגת פריט עם כפתורי עריכה ומחיקה */
-									<>
+									/* תצוגת פריט עם כפתורי עריכה ומחיקה */	
+								<>
 										<div style={{ flex: 1 }}>
 											<strong style={{ textDecoration: it.checked ? 'line-through' : 'none' }}>{it.name}</strong>
 											<div style={{ fontSize: 12, color: '#555' }}>{it.quantity ?? ''} {it.note ? `• ${it.note}` : ''}</div>

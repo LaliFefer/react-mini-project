@@ -1,11 +1,12 @@
 const itemForShabbat = [ 
-	{ id: '1', name: 'חלה', quantity: '2', note: '', checked: false },
-	{ id: '2', name: 'יין', quantity: '1', note: '', checked: false }, 
-	{ id: '3', name: 'בשר', quantity: '5', note: '', checked: false }, 
-	{ id: '4', name: 'שתייה', quantity: '2', note: 'קולה', checked: false }, 
-	{ id: '5', name: 'דגים', quantity: '5', note: 'סלמון', checked: false }, 
+	{ id: '1', name: 'חלה', quantity: '2', note: '', checked: false, kind: ['בשבת בבית', 'סעודה ראשונה בבית', 'סעודה שניה בבית', 'סעודה שלישית בבית', 'נוסעים לשבת']},
+	{ id: '2', name: 'יין', quantity: '1', note: '', checked: false, kind: ['בשבת בבית', 'סעודה ראשונה בבית', 'סעודה שניה בבית', 'סעודה שלישית בבית'] }, 
+	{ id: '3', name: 'בשר', quantity: '5', note: '', checked: false, kind: ['בשבת בבית', 'סעודה ראשונה בבית', 'סעודה שניה בבית'] }, 
+	{ id: '4', name: 'שתייה', quantity: '2', note: 'קולה', checked: false, kind: ['בשבת בבית', 'סעודה ראשונה בבית', 'סעודה שניה בבית', 'סעודה שלישית בבית', 'נוסעים לשבת'] }, 
+	{ id: '5', name: 'דגים', quantity: '5', note: 'סלמון', checked: false, kind: ['בשבת בבית', 'סעודה ראשונה בבית', 'סעודה שניה בבית'] }, 
+	{ id: '6', name: 'מטלטלים', quantity: '1', note: 'טלפון, כרטיס', checked: false, kind: ['נוסעים לשבת'] },
+	{ id: '7', name: 'מנה אחרונה (גלידה)', quantity: '1', note: 'לפי כמות', checked: false, kind: ['סעודה שלישית בבית'] }
 ]; 
-
 let items = itemForShabbat.slice(); // עותק של המערך לשימוש דינמי (שינוי ב-items לא ישנה את המקור)
 
 // Public API (פונקציות שנחשפות לשימוש חיצוני)
@@ -21,7 +22,8 @@ export async function addItem(item) { // מוסיף פריט חדש
 		name: item.name, 
 		quantity: item.quantity || '', 
 		note: item.note || '',
-		checked: !!item.checked, 
+		checked: !!item.checked,
+		kind: Array.isArray(item.kind) ? item.kind : ['בשבת בבית']
 	};
 	items.push(newItem); 
 	return newItem; // החזרת הפריט שנוסף
