@@ -2,7 +2,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { fetchDefaultSettings } from '../data/Home';
 import AppTasks from '../AppTasks.jsx'
 
-function Home({ setRoute }) {
+function Home() {
   const [shabbatTime, setShabbatTime] = useState("");
   const [location, setLocation] = useState("");
   const [numberOfMeals, setNumberOfMeals] = useState(3);

@@ -1,29 +1,44 @@
-import preactLogo from './assets/preact.svg'
-import viteLogo from '/vite.svg'
-import ShoppingPage from './component/ShoppingPage'
+import { Header } from './component/Header';
 import './app.css'
-import { h } from 'preact'
-import { useState } from 'preact/hooks'
-import Home from './component/Home.jsx'
-import AppTasks from './AppTasks.jsx'
+import { useState } from 'react';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 
+// קומפוננטה מוגדרת כפונקציה
+function App() {
+  // החלק הראשון של הפונקציה מוקדש ללוגיקה - הקוד של הקומפוננטה
 
-export function App() {
-  const [route, setRoute] = useState('home')
+  // יצירה של משתנה סטייט
+  const [color, setColor] = useState('#fe12ea');
+  const [showTasks, setShowTasks] = useState(false);
 
+  const showTasksClicked = () => {
+    setShowTasks(!showTasks);
+  }
+
+  // הפונקציה מחזירה את החלק הוויזואלי של הקומפוננטה
   return (
-    <div>
-      <header style={{ padding: '8px', borderBottom: '1px solid #ddd', display: 'flex', gap: '8px' }}>
-        <button onClick={() => setRoute('home')}>Home</button>
-        <button onClick={() => setRoute('tasks')}>Tasks</button>
-        <button onClick={() => setRoute('shopping')}>Shopping</button>
-      </header>
+    <div className='app'>
+    
+      <Header color={color} />
+      
+      <div>
+        <ul>
+          <li> <NavLink to="/">home</NavLink> </li>
+          <li> <NavLink to="/tasks">tasks</NavLink> </li>
+          <li> <NavLink to="/shopping">shopping</NavLink> </li>
+        </ul>
+      </div>
 
-      <main style={{ padding: '12px' }}>
-        {route === 'home' && <Home setRoute={setRoute} />}
-        {route === 'tasks' && <AppTasks />}
-        {route === 'shopping' && <ShoppingPage />}
-      </main>
+      <Outlet />
+
+      <input type='color' value={color} onChange={event => setColor(event.target.value)}/>
+
+      <button onClick={showTasksClicked} > { showTasks ? 'hide' : 'show' } tasks </button>
+
+      { showTasks ? <div>Tasks Status</div> : ''}
+     
     </div>
   )
 }
+
+export default App
