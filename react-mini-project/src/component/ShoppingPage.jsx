@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks'
+import React, { useState } from 'react'
 import ShabbatShopping from './ShabbatShopping'
 
 export default function ShoppingPage() {

@@ -1,5 +1,4 @@
-import { h } from 'preact'
-import { useState } from 'preact/hooks'
+import React, { useState } from 'react'
 import { ShowTasksList } from './component/Preparations.jsx'
 import { ShowItemsTasksList } from './component/statusTasks.jsx'
 import { getStandardTasks } from './data/Preparations'

@@ -1,5 +1,4 @@
-import { h } from 'preact' // הוספת ייבוא של h מ-Preact כדי לאפשר JSX (שורה נוספה)
-import { useState } from 'preact/hooks' // הוספת useState עבור מצב מקומי של טפסים (שורה נוספה)
+import React, { useState } from 'react' // use React and hooks
 
 export function ShowItemsTasksList({ tasks, onDelete, onUpdate, onAdd, onBack }) { // שונה: מקבל props במקום לנסות לטעון נתונים מקומית
   const [editingId, setEditingId] = useState(null) // שורה חדשה: מזהה המשימה שנערך כמצב מקומי

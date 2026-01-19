@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'preact/hooks';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { fetchDefaultSettings } from '../data/Home';
 import AppTasks from '../AppTasks.jsx'
 
@@ -8,6 +9,7 @@ function Home() {
   const [numberOfMeals, setNumberOfMeals] = useState(3);
   const [meals, setMeals] = useState(false);
   const [showTasks, setShowTasks] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     fetchDefaultSettings().then((data) => {
       setShabbatTime(data.shabbatTime);
@@ -60,7 +62,7 @@ function Home() {
       <div style={{ marginTop: '12px' }}>
         <button onClick={handleReset}>איפוס הגדרות</button>
         <button onClick={() => setShowTasks(s => !s)} style={{ marginLeft: '8px' }}>{showTasks ? 'הסתר משימות' : 'הצג משימות'}</button>
-        <button onClick={() => setRoute('shopping')} style={{ marginLeft: '8px' }}>לרשימת קניות</button>
+        <button onClick={() => navigate('/shopping')} style={{ marginLeft: '8px' }}>לרשימת קניות</button>
       </div>
 
       {showTasks && <AppTasks />}

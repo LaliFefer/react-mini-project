@@ -1,5 +1,5 @@
 // קומפוננטת Preact: ShabbatShopping.jsx
-import { useEffect, useState } from 'preact/hooks'; 
+import React, { useEffect, useState } from 'react'; 
 import { getItems, addItem, updateItem, removeItem } from '../data/ShabbatShopping';
 
 export default function ShabbatShopping({ filterKind = null }) { // הגדרת הקומפוננטה הראשית עם prop לסינון

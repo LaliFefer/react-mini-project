@@ -1,4 +1,4 @@
-import { h } from 'preact' // ייבוא h מ-Preact בשביל JSX
+import React from 'react' // React import for JSX
 
 export const ShowTasksList = ({ tasks, onToggle, onOpenDetails }) => { // שונה: עכשיו מקבל props במקום לנהל state פנימי
     return (
